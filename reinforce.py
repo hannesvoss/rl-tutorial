@@ -49,16 +49,18 @@ def generate_episode():
 
 # Training
 num_episodes = 1000
+
 for episode in range(num_episodes):
     episode_data = generate_episode()
     G = 0
     for t in reversed(range(len(episode_data))):
         state, action, reward = episode_data[t]
         G = reward + gamma * G
-        probs = softmax(theta[state])
-        gradient = -probs
+        
+        gradient = -softmax(theta[state])
         gradient[action] += 1
-        theta[state] += alpha * G * gradient
+        
+        theta[state] += alpha * gradient * G
 
 # Zeige die trainierte Policy
 print("Trainierte Policy (Wahrscheinlichkeiten):")
